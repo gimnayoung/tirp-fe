@@ -1,12 +1,17 @@
 import React from "react";
-import Login from "./components/login"
-import SginUp from "./components/sginUp";
+import AppRouter from "./routers/AppRouter";
+import AppLayout from "./layout/appLayout";
+import store from "./reducer/store";
 
 function App() {
+  let unsubscribe = store.subscribe(() =>
+  console.log(store.getState(),"상태알려줌")
+);
   return (
     <div>
-     <Login/>
-     <SginUp/>
+      <AppLayout>
+        <AppRouter/>
+      </AppLayout>
     </div>
   );
 }

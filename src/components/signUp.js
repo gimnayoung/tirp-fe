@@ -82,7 +82,7 @@ const StyledLink = styled.a`
   }
 `;
 
-function SginUp() {
+function SignUp() {
     const navigate=useNavigate();
     const dispatch=useDispatch();
     const [formData,setFormData]=useState({
@@ -107,7 +107,7 @@ function SginUp() {
             return;
         }
         setPasswordError("");
-        dispatch(userActions.sginUpUser({email,password,name},navigate));
+        dispatch(userActions.signUpUser({email,password,name},navigate));
     }
   return (
     <StyledCard key="2">
@@ -154,4 +154,4 @@ function SginUp() {
   );
 }
 
-export default SginUp;
+export default SignUp;

@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import {useDispatch,useSelector} from "react-redux";
+import { userActions } from '../action/userAction';
 
 const StyledContainer = styled.div`
   text-align: center;
@@ -28,7 +31,7 @@ const StyledCardDescription = styled.p`
   color: #4a5568;
 `;
 
-const StyledCardContent = styled.div`
+const StyledCardContent = styled.form`
   margin-top: 1rem;
   margin-bottom: 1rem;
 
@@ -79,21 +82,35 @@ const StyledOutlineButton = styled(StyledButton)`
 // `;
 
 function Login() {
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
+  const navigate= useNavigate();
+  const dispatch=useDispatch();
+  const user= useSelector((state)=>state.user.user);
+  console.log('loginuser',user)
+
+  const loginWithEmail=(e)=>{
+    e.preventDefault();
+    dispatch(userActions.loginWithEmail({email,password}));
+  }
+  if(user){
+    navigate('/');
+  }
   return (
     <div>
-        <StyledCard key="1">
+      <StyledCard>
       <StyledCardHeader>
         <StyledCardTitle>로그인</StyledCardTitle>
         <StyledCardDescription>글 내용</StyledCardDescription>
       </StyledCardHeader>
-      <StyledCardContent>
+      <StyledCardContent onClick={loginWithEmail}>
         <div>
           <StyledLabel htmlFor="email">이메일</StyledLabel>
-          <StyledInput id="email" placeholder="이메일을 입력하세요" required type="email" />
+          <StyledInput  onChange={(e)=>{ setEmail(e.target.value)}}  id="email" placeholder="이메일을 입력하세요" required type="email" />
         </div>
         <div>
           <StyledLabel htmlFor="password">비밀번호</StyledLabel>
-          <StyledInput id="password" required type="password" />
+          <StyledInput  onChange={(e)=>{ setPassword(e.target.value)}} id="password" required type="password" />
         </div>
         <StyledButton>로그인</StyledButton>
         <StyledOutlineButton>
