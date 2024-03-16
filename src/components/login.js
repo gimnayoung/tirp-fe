@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import {useDispatch,useSelector} from "react-redux";
 import { userActions } from '../action/userAction';
+import { GoogleLogin } from '@react-oauth/google';
 
 const StyledContainer = styled.div`
   text-align: center;
@@ -77,9 +78,9 @@ const StyledOutlineButton = styled(StyledButton)`
   }
 `;
 
-// const StyledLink = styled(Link)`
-//   text-decoration: underline;
-// `;
+const StyledLink = styled(StyledButton)`
+  text-decoration: underline;
+`;
 
 function Login() {
   const [email,setEmail]=useState("");
@@ -92,6 +93,10 @@ function Login() {
   const loginWithEmail=(e)=>{
     e.preventDefault();
     dispatch(userActions.loginWithEmail({email,password}));
+  }
+  const handleGoogleLogin= async(googleData)=>{
+    //googleData= clientId, credential, select_by
+    dispatch(userActions.loginWithGoogle(googleData.credential))
   }
   if(user){
     navigate('/');
@@ -113,13 +118,19 @@ function Login() {
           <StyledInput  onChange={(e)=>{ setPassword(e.target.value)}} id="password" required type="password" />
         </div>
         <StyledButton>로그인</StyledButton>
+        <GoogleLogin
+          onSuccess={handleGoogleLogin}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
         <StyledOutlineButton>
           구글로 로그인
         </StyledOutlineButton>
         <div className="text-center mt-4">
-          {/* <StyledLink href="#">
+          <StyledLink onClick={()=>{navigate('/sign')}}>
             회원가입
-          </StyledLink> */}
+          </StyledLink>
         </div>
       </StyledCardContent>
     </StyledCard>

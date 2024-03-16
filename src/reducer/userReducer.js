@@ -12,16 +12,18 @@ function userReducer(state = initialState, action) {
     case types.SIGNUP_USER_REQUEST:
     case types.LOGIN_REQUEST:
     case types.LOGIN_TOKEN_REQUES:
+    case types.GOOGLE_LOGIN_REQUEST:
         return {...state,loading:false}
     case types.LOGIN_SUCCESS:
     case types.LOGIN_TOKEN_SUCCESS:
+    case types.GOOGLE_LOGIN_SUCCESS:
       return {...state,loading:false,user:payload.user}
     case types.SIGNUP_USER_FAIL:
     case types.LOGIN_FAIL:
         return {...state,loading:false,error:payload}
-    case type.LOGIN_TOKEN_FAIL:
+    case types.LOGIN_TOKEN_FAIL:
         return {...state,loading:false}
-    case type.LOGOUT:
+    case types.LOGOUT:
         return{...state,user:null}
     default:
       return state; 

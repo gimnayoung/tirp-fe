@@ -11,6 +11,8 @@ import {
 import SignUp from "../components/signUp";
 import Login from "../components/login"
 import Trip from "../components/trip";
+import ProductAdd from "../components/productAdd";
+
 const AppRouter=()=>{
 return(
     <div>  
@@ -36,7 +38,13 @@ return(
                     </>
                 }
             />
-
+            <Route path="/productAdd"
+                element={
+                    <>
+                    <ProductAdd/>
+                    </>
+                }
+            />
         </Routes>
     </div>
 )

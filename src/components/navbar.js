@@ -3,10 +3,11 @@ import {useDispatch,useSelector} from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import { userActions } from "../action/userAction";
 
-function Navber({user}){
+function Navber(){
     const navigate= useNavigate();
     const dispatch = useDispatch();
-
+    const user= useSelector((state)=>state.user.user);
+    
     const logout=()=>{
        console.log('로그아웃클릭')
         dispatch(userActions.logout());

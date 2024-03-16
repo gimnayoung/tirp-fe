@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-// import Link from "next/link"
+import {useDispatch,useSelector} from "react-redux";
+import { useState } from 'react';
+import ProductAdd from './productAdd';
 
 const StyledCard = styled.div`
   width: 100%;
@@ -64,18 +66,36 @@ const TravelDestination = styled.p`
 `;
 
 function Trip() {
+  const user= useSelector((state)=>state.user.user);
+  const [mode,setMode]=useState("new");
+  const [showDialog,setShowDialog] =useState(false);
+
+  const handleClickNewTrip =()=>{
+    setMode("new");
+    setShowDialog(true);
+  }
   return (
     <StyledCard>
       <CardHeader>
         <CardTitle>내 여행 기록</CardTitle>
-        <CardDescription>로그인 후 작성한 글을 모아볼 수 있습니다.</CardDescription>
+        {!user && (
+          <>
+            <CardDescription>로그인 후 작성한 글을 모아볼 수 있습니다.</CardDescription>
+          </>
+        )}
       </CardHeader>
-      <div className="flex justify-end mt-4">
-        <StyledButton>+</StyledButton>
+      <div>
+        {
+          user && (
+            <>
+            <StyledButton onClick={handleClickNewTrip}>+</StyledButton>
+            </>
+          )
+        }
       </div>
       <CardContent>
         <ScrollArea>
-          <div className="grid grid-cols-3 gap-2">
+          <div>
             {Array.from({ length: 20 }, (_, index) => (
               <div key={index}>
                 {/* <Link href="#">
@@ -90,6 +110,9 @@ function Trip() {
           </div>
         </ScrollArea>
       </CardContent>
+      {
+        showDialog && ( <><ProductAdd mode ={mode} setShowDialog ={setShowDialog} showDialog= {showDialog}/></>)
+      }
     </StyledCard>
   );
 }
