@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {useDispatch,useSelector} from "react-redux";
 import { userActions } from '../action/userAction';
 import { GoogleLogin } from '@react-oauth/google';
+import LoginCard from './loginCard';
 
 const StyledContainer = styled.div`
   text-align: center;
@@ -92,18 +93,18 @@ function Login() {
 
   const loginWithEmail=(e)=>{
     e.preventDefault();
-    dispatch(userActions.loginWithEmail({email,password}));
+    dispatch(userActions.loginWithEmail({email,password},navigate));
   }
   const handleGoogleLogin= async(googleData)=>{
     //googleData= clientId, credential, select_by
-    dispatch(userActions.loginWithGoogle(googleData.credential))
+    dispatch(userActions.loginWithGoogle(googleData.credential,navigate))
   }
   if(user){
-    navigate('/');
+    navigate('/trip');
   }
   return (
     <div>
-      <StyledCard>
+      <div className='card'>
       <StyledCardHeader>
         <StyledCardTitle>로그인</StyledCardTitle>
         <StyledCardDescription>글 내용</StyledCardDescription>
@@ -133,7 +134,7 @@ function Login() {
           </StyledLink>
         </div>
       </StyledCardContent>
-    </StyledCard>
+    </div>
     </div>
   )
 }

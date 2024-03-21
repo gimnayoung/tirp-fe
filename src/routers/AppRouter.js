@@ -12,19 +12,39 @@ import SignUp from "../components/signUp";
 import Login from "../components/login"
 import Trip from "../components/trip";
 import ProductAdd from "../components/productAdd";
+import Test from "../page/test"
+import PostCode from "../components/postCode";
+import GoogleCode from "../components/googleCode";
+import LoginCard from "../components/loginCard";
+import Main from "../page/main";
+import styled from "styled-components";
+import Testfile from "../components/testFile";
 
+const Wrap = styled.div`
+display: flex; 
+height: 100vh;
+justify-content: center;
+align-items: center;  
+`
 const AppRouter=()=>{
 return(
-    <div>  
+    <Wrap>  
         <Routes>
           <Route path="/"
+                element={
+                    <>
+                    <Main/>
+                    </>
+                }
+            />
+            <Route path="/trip"
                 element={
                     <>
                     <Trip/>
                     </>
                 }
             />
-            <Route path="/sign"
+            <Route path="/signup"
                 element={
                     <>
                     <SignUp/>
@@ -45,8 +65,19 @@ return(
                     </>
                 }
             />
+            <Route path="/test"
+                element={
+                    <>
+                    {/* <Test/> */}
+                    {/* <PostCode/> */}
+                    {/* <GoogleCode/> */}
+                    {/* <LoginCard/> */}
+                    <Testfile/>
+                    </>
+                }
+            />
         </Routes>
-    </div>
+    </Wrap>
 )
 }
 export default AppRouter;

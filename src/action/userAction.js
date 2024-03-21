@@ -12,11 +12,12 @@ const signUpUser = ({ email, name, password },navigate) => {
             navigate('/login');
         } catch (error) {
             dispatch({type:types.SIGNUP_USER_FAIL,payload:error.error});
+            alert(error.error)
         }
     };
 };
 
-const loginWithEmail =({email ,password})=>async (dispatch) =>{   
+const loginWithEmail =({email ,password},navigate)=>async (dispatch) =>{   
     try{
         dispatch({type:types.LOGIN_REQUEST});
         const response =await api.post("/auth/login",{email, password});
@@ -24,6 +25,7 @@ const loginWithEmail =({email ,password})=>async (dispatch) =>{
         dispatch({type:types.LOGIN_SUCCESS, payload:response.data});
         sessionStorage.setItem("token",response.data.token);
         alert('로그인에 성공했습니다.')
+        navigate('/trip');
         }
     catch(error){
         dispatch({type:types.LOGIN_FAIL,payload:error.error});
@@ -48,12 +50,15 @@ const logout=()=>async(dispatch)=> {
     sessionStorage.removeItem("token");
 }
 
-const loginWithGoogle=(token)=>async(dispatch)=>{
+const loginWithGoogle=(token,navigate)=>async(dispatch)=>{
     try{
         dispatch({type:types.GOOGLE_LOGIN_REQUEST});
-        const response = await api.post("/auth/google",token); //todo
+        const response = await api.post("/auth/google",{token}); //todo
         if(response.status !== 200) throw new Error(response.error);
-        dispatch({type:types.GOOGLE_LOGIN_SUCCESS , payload:response.data})
+        sessionStorage.setItem("token",response.data.token);
+        dispatch({type:types.GOOGLE_LOGIN_SUCCESS , payload:response.data});
+        alert('로그인에 성공했습니다.');
+        navigate('/trip');
     }
     catch(error){
         dispatch({type:types.GOOGLE_LOGIN_FAIL,payload:error.error});

@@ -115,7 +115,7 @@ function SignUp() {
         <StyledCardTitle>회원가입</StyledCardTitle>
         <StyledCardDescription>계정을 만들려면 정보를 입력하세요.</StyledCardDescription>
       </StyledCardHeader>
-      <StyledCardContent onClick={register}>
+      <StyledCardContent>
         <div>
           <StyledLabel htmlFor="name">이름</StyledLabel>
           <StyledInput 
@@ -142,7 +142,7 @@ function SignUp() {
           id="confirmPassword" required type="password"  placeholder="비밀번호 재확인"/>
           {passwordError}
         </div>
-        <StyledButton>가입하기</StyledButton>
+        <StyledButton  onClick={register}>가입하기</StyledButton>
         <StyledButton variant="outline" >구글로 회원가입</StyledButton>
         <div>
           {/* <Link href="#">

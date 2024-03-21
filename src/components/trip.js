@@ -17,12 +17,6 @@ const CardHeader = styled.div`
   text-align: center;
 `;
 
-const CardTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-`;
-
 const CardDescription = styled.p`
   font-size: 1rem;
   color: #6b7280;
@@ -75,9 +69,9 @@ function Trip() {
     setShowDialog(true);
   }
   return (
-    <StyledCard>
+    <div className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
       <CardHeader>
-        <CardTitle>내 여행 기록</CardTitle>
+        <div>'아무개'님의 Trip Log</div>
         {!user && (
           <>
             <CardDescription>로그인 후 작성한 글을 모아볼 수 있습니다.</CardDescription>
@@ -88,7 +82,7 @@ function Trip() {
         {
           user && (
             <>
-            <StyledButton onClick={handleClickNewTrip}>+</StyledButton>
+            <div className='button w-12 h-7' onClick={handleClickNewTrip}>추가</div>
             </>
           )
         }
@@ -113,7 +107,7 @@ function Trip() {
       {
         showDialog && ( <><ProductAdd mode ={mode} setShowDialog ={setShowDialog} showDialog= {showDialog}/></>)
       }
-    </StyledCard>
+    </div>
   );
 }
 
