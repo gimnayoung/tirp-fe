@@ -4,84 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {useDispatch,useSelector} from "react-redux";
 import { userActions } from '../action/userAction';
 import { GoogleLogin } from '@react-oauth/google';
-import LoginCard from './loginCard';
-
-const StyledContainer = styled.div`
-  text-align: center;
-`;
-
-const StyledCard = styled.div`
-  width: 100%;
-  max-width: 20rem;
-  margin: 0 auto;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.25rem;
-  padding: 1rem;
-`;
-
-const StyledCardHeader = styled.div`
-  text-align: center;
-`;
-
-const StyledCardTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-`;
-
-const StyledCardDescription = styled.p`
-  font-size: 1rem;
-  color: #4a5568;
-`;
-
-const StyledCardContent = styled.form`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-
-  & > div {
-    margin-bottom: 0.5rem;
-  }
-`;
-
-const StyledLabel = styled.label`
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`;
-
-const StyledInput = styled.input`
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid #e2e8f0;
-`;
-
-const StyledButton = styled.button`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 0.25rem;
-  background-color: #4299e1;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #2b6cb0;
-  }
-`;
-
-const StyledOutlineButton = styled(StyledButton)`
-  border: 1px solid #4299e1;
-  background-color: transparent;
-  color: #4299e1;
-
-  &:hover {
-    color: #2b6cb0;
-  }
-`;
-
-const StyledLink = styled(StyledButton)`
-  text-decoration: underline;
-`;
+import Right from "../image/right.png"
 
 function Login() {
   const [email,setEmail]=useState("");
@@ -103,39 +26,55 @@ function Login() {
     navigate('/trip');
   }
   return (
-    <div>
-      <div className='card'>
-      <StyledCardHeader>
-        <StyledCardTitle>로그인</StyledCardTitle>
-        <StyledCardDescription>글 내용</StyledCardDescription>
-      </StyledCardHeader>
-      <StyledCardContent onClick={loginWithEmail}>
+      <Wrap className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
+      <RightImg><img src={Right}/></RightImg>
+      <TitleHeader>
+        <Title>Log in</Title>
+      </TitleHeader>
+      <form className='p-1'>
         <div>
-          <StyledLabel htmlFor="email">이메일</StyledLabel>
-          <StyledInput  onChange={(e)=>{ setEmail(e.target.value)}}  id="email" placeholder="이메일을 입력하세요" required type="email" />
+          <Label className='' htmlFor="email">이메일</Label>
+          <input className='input'  onChange={(e)=>{ setEmail(e.target.value)}}  id="email" placeholder="이메일을 입력하세요" required type="email" />
         </div>
         <div>
-          <StyledLabel htmlFor="password">비밀번호</StyledLabel>
-          <StyledInput  onChange={(e)=>{ setPassword(e.target.value)}} id="password" required type="password" />
+          <Label htmlFor="password">비밀번호</Label>
+          <input className='input'   onChange={(e)=>{ setPassword(e.target.value)}} id="password" placeholder="비밀번호를 입력하세요" required type="password" />
         </div>
-        <StyledButton>로그인</StyledButton>
-        <GoogleLogin
-          onSuccess={handleGoogleLogin}
-          onError={() => {
-            console.log('Login Failed');
-          }}
-        />
-        <StyledOutlineButton>
-          구글로 로그인
-        </StyledOutlineButton>
-        <div className="text-center mt-4">
-          <StyledLink onClick={()=>{navigate('/sign')}}>
-            회원가입
-          </StyledLink>
+        <div className='flex flex-col h-[150px] justify-between mt-12'>
+          <button className='button w-[100%] h-[40px]' onClick={loginWithEmail}>로그인</button>
+          <button className='button w-[100%] h-[40px]' onClick={()=>{navigate('/signup')}}>회원가입</button>
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+          />   
         </div>
-      </StyledCardContent>
-    </div>
-    </div>
+      </form>
+    </Wrap>
   )
 }
+
+const Label = styled.label`
+  font-weight: 600;
+  color: #444242;
+`;
+const Title=styled.h1`
+font-size: 3rem;
+font-weight: 700;
+color: #80BD95;
+-webkit-text-stroke: 1px black;
+`
+const TitleHeader =styled.div`
+margin-top: 77px;
+text-align: center;
+`
+const Wrap = styled.div`
+position:  relative;
+overflow: hidden;
+`
+const RightImg= styled.div`
+position: absolute;
+right: -11px;
+`
 export default Login;

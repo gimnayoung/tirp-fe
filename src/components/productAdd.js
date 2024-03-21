@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from "react-redux";
+import { type } from '@testing-library/user-event/dist/type';
+import { productAtion } from '../action/productAtion';
 
 function ProductAdd({mode, setShowDialog, showDialog}) {
-
   let fileReader =new FileReader();
   const weatherOptions = ['맑음', '비', '눈', '구름'];
+  const dispatch = useDispatch();
   const newFormData= {
     image:["url","url2"],
     location:"",
@@ -56,9 +59,12 @@ useEffect(()=>{
       e.preventDefault();
       console.log(formData, '총데이터');
       if (!formData.location.trim() ||!formData.date.trim() || !formData.weather.trim() || !formData.title.trim() || !formData.description.trim()) {
-        alert("모든 필드를 입력하세요.");
+        return alert("모든 필드를 입력하세요.");
       }
+      dispatch(productAtion.createProduct({...formData,image:seletedImages}))
+
     }
+
   return (
     <div className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
       <ModalHeader>
