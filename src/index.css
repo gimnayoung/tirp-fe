@@ -41,7 +41,20 @@
   .deleteButton { 
     @apply w-[80px] mr-1 border border-black flex items-center justify-center p-1 whitespace-nowrap overflow-hidden ;
   }
+  .photoCard {
+    @apply w-[210px] h-[150px] border border-black 
+  }
+  .photoCard-Title{
+    @apply h-[15%] flex items-center p-1 text-mainColor-color_Gray
+  }
+  .photoCard-Img{
+    @apply w-[100%] h-[85%] 
+  }
+  .photoCard-button{
+    @apply button rounded-full absolute top-[50%] w-[30px] h-[30px] flex justify-center bg-mainColor-color_Ivory
+  }
 }
+
  
 @font-face {
   font-family: "pretendard";

@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
-import { type } from '@testing-library/user-event/dist/type';
 import { productAtion } from '../action/productAtion';
+import { useNavigate, useParams } from "react-router-dom";
 
 function ProductAdd({mode, setShowDialog, showDialog}) {
+  const user= useSelector((state)=>state.user.user);
+  const navigate = useNavigate();
   let fileReader =new FileReader();
   const weatherOptions = ['맑음', '비', '눈', '구름'];
   const dispatch = useDispatch();
   const newFormData= {
-    image:["url","url2"],
+    productId:1,
+    image:[],
     location:"",
-    title:"",
     weather:"",
     date:"",
+    title:"",
     description:"",
    }
    const [formData,setFormData]=useState(mode ==="new" ? {...newFormData}:"");
    const [seletedImages,setSeletedImages]=useState([]);
    const [nullError,setNullError]=useState("");
-   const totalSeletedImages = {};
 
     const handleChange=(e)=>{
         e.preventDefault();
@@ -37,39 +39,46 @@ function ProductAdd({mode, setShowDialog, showDialog}) {
       if (totalSelectedImages.length > maxImage) alert (`업로드 가능한 사진은 최대 ${maxImage}장 까지 입니다.`);
       let newImages = [...seletedImages];
       for (let i = 0; i < imageLength && newImages.length < maxImage; i++) {
-        newImages.push(totalSelectedImages[i].name);
+        const file = totalSelectedImages[i];
+        const imageUrl= URL.createObjectURL(file);
+        newImages.push({name:file.name,imgUrl:imageUrl});
       }
      setSeletedImages(newImages);
     }
-useEffect(()=>{
-  console.log(seletedImages , '이미지이름들')
-},[seletedImages])
     const renderFileButtons = () => {
       return seletedImages.map((file, index) => (
-          <button key={index} className='deleteButton'onClick={() => removeFile(file)} >
-            {file}
+          <button key={index} className='deleteButton'onClick={() => removeFile(index)} >
+            {file.name}
           </button>
       ));
     };
-    const removeFile = (fileName) => {
-      setSeletedImages(prevFiles => prevFiles.filter(file => file.name !== fileName));
+    const removeFile = (index) => {
+      setSeletedImages(prevFiles => prevFiles.filter((file,i) => i !== index));
     };
 
-    const handleSubmit = (e) => {
+    const handleAddSubmit = (e) => {
       e.preventDefault();
-      console.log(formData, '총데이터');
-      if (!formData.location.trim() ||!formData.date.trim() || !formData.weather.trim() || !formData.title.trim() || !formData.description.trim()) {
-        return alert("모든 필드를 입력하세요.");
+      if(!user){navigate('/login')}
+      if(mode === "new"){
+        const imageUrls = seletedImages.map(image => image.imgUrl);
+        const updatedFormData = { ...formData, image: imageUrls };
+        dispatch(productAtion.createProduct({updatedFormData}))
+        setShowDialog(false);
       }
-      dispatch(productAtion.createProduct({...formData,image:seletedImages}))
-
     }
+    // const TestHandle =()=>{
+    //   const imageUrls = seletedImages.map(image => image.imgUrl);
+    //   setFormData(prevFormData => ({ ...prevFormData, image: imageUrls }));
+    //   dispatch(productAtion.createProduct({formData}))
+    //   console.log("{formData}:",formData);
+    // }
 
   return (
     <div className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
       <ModalHeader>
-          <button className='button p-3' onClick={handleSubmit}>추가</button>
+          <button className='button p-3' onClick={handleAddSubmit}>추가</button>
           <button className='button p-3 ml-1' onClick={handleClickClose}>닫기</button>
+          {/* <button onClick={TestHandle}>test용입니다</button> */}
       </ModalHeader>
       <form className='flex flex-col p-1 w-[100%] h-[100%]'>
       <div>

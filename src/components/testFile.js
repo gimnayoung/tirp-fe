@@ -8,7 +8,7 @@ const TestFile = () => {
       const fileSizeInBytes = file.size;
       const fileSizeInKilobytes = fileSizeInBytes / 1024;
       const fileSizeInMegabytes = fileSizeInKilobytes / 1024;
-
+      console.log('파일 전체:', file);
       console.log('파일 이름:', file.name);
       console.log('파일 크기 (bytes):', fileSizeInBytes);
       console.log('파일 크기 (KB):', fileSizeInKilobytes);

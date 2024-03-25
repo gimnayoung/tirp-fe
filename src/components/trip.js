@@ -1,33 +1,16 @@
 import styled from 'styled-components';
 import {useDispatch,useSelector} from "react-redux";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductAdd from './productAdd';
-
-const CardHeader = styled.div`
-  text-align: center;
-`;
-
-const CardDescription = styled.p`
-  font-size: 1rem;
-  color: #6b7280;
-`;
-
-const CardContent = styled.div`
-  padding: 0;
-`;
-
-const ScrollArea = styled.div`
-  overflow-y: auto;
-  max-height: 540px;
-`;
-
-const TravelDestination = styled.p`
-  font-size: 0.875rem;
-  text-align: center;
-  color: #6b7280;
-`;
+import { productAtion } from '../action/productAtion';
+import ProductTable from './productTable';
 
 function Trip() {
+  useEffect(()=>{
+    dispatch(productAtion.getProductList())
+  },[])
+  const dispatch=useDispatch();
+  const productList = useSelector((state) => state.product.productList);
   const user= useSelector((state)=>state.user.user);
   const [mode,setMode]=useState("new");
   const [showDialog,setShowDialog] =useState(false);
@@ -36,47 +19,62 @@ function Trip() {
     setMode("new");
     setShowDialog(true);
   }
+  const deleteItem = (id) => {
+    // dispatch(productActions.deleteProduct(id))
+  };
   return (
     <div className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
-      <CardHeader>
-        <div>'아무개'님의 Trip Log</div>
-        {!user && (
-          <>
-            <CardDescription>로그인 후 작성한 글을 모아볼 수 있습니다.</CardDescription>
-          </>
+      <Wrap>
+      <div className='flex p-1 h-[64px] items-center relative'>
+        <div className='absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-mainColor-color_Black'>'아무개'님의 Trip Log</div>
+        {!user && (<div className='absolute bottom-0 left-1/2 transform -translate-x-1/2 text-[13px] text-[red]'>로그인 후 작성한 글을 모아볼 수 있습니다.</div>
         )}
-      </CardHeader>
-      <div>
-        {
-          user && (
-            <>
-            <div className='button w-12 h-7' onClick={handleClickNewTrip}>추가</div>
-            </>
-          )
+        {user && (<div className='button w-12 h-7 absolute right-1' onClick={handleClickNewTrip}>추가</div>)
         }
       </div>
-      <CardContent>
-        <ScrollArea>
-          <div>
-            {Array.from({ length: 20 }, (_, index) => (
-              <div key={index}>
-                {/* <Link href="#">
-                  <TravelImage
-                    alt="Travel Photo"
-                    src="/placeholder.svg"
-                  />
-                </Link> */}
-                <TravelDestination>Travel Destination {index + 1}</TravelDestination>
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
-      </CardContent>
+      {
+        user ? (<CardContent>
+          <ProductTable
+          data={productList}
+          deleteItem={deleteItem}
+          />
+        </CardContent>) :(<button>로그인하러 가기</button>)
+      }
       {
         showDialog && ( <><ProductAdd mode ={mode} setShowDialog ={setShowDialog} showDialog= {showDialog}/></>)
       }
+      </Wrap>
     </div>
   );
 }
+const CardContent = styled.div`
+  padding: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  height: 85%;
+  overflow-y: scroll;
+`;
+const ModalHeader=styled.div`
+padding: 4px;
+display: flex;
+align-items: center;
+height: 64px;
+`
+const Wrap = styled.div`
+height: 100%;
+box-sizing: border-box;
+`
 
+// {Array.from({ length: 20 }, (_, index) => (
+//   <div key={index}>
+//     {/* <Link href="#">
+//       <TravelImage
+//         alt="Travel Photo"
+//         src="/placeholder.svg"
+//       />
+//     </Link> */}
+//     <TravelDestination>Travel Destination {index + 1}</TravelDestination>
+//   </div>
+// ))}
 export default Trip;

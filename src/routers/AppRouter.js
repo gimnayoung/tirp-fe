@@ -15,10 +15,11 @@ import ProductAdd from "../components/productAdd";
 import Test from "../page/test"
 import PostCode from "../components/postCode";
 import GoogleCode from "../components/googleCode";
-import LoginCard from "../components/loginCard";
 import Main from "../page/main";
 import styled from "styled-components";
 import Testfile from "../components/testFile";
+import ProductdDetail from "../components/productDetail";
+import ImgTest from "../components/imgTest";
 
 const Wrap = styled.div`
 display: flex; 
@@ -41,6 +42,13 @@ return(
                 element={
                     <>
                     <Trip/>
+                    </>
+                }
+            />
+            <Route path="/trip/:id"
+                element={
+                    <>
+                    <ProductdDetail/>
                     </>
                 }
             />
@@ -72,7 +80,8 @@ return(
                     {/* <PostCode/> */}
                     {/* <GoogleCode/> */}
                     {/* <LoginCard/> */}
-                    <Testfile/>
+                    {/* <Testfile/> */}
+                    <ImgTest/>
                     </>
                 }
             />
