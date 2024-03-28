@@ -14,6 +14,8 @@ import ProductAdd from './productAdd';
 import { productAtion } from '../action/productAtion';
 
 function ProductdDetail(){
+  const [name,setName]=useState('')
+    const [loading, setLoading] = useState(true); // loading 상태 추가
     const productList= useSelector((state)=>state.product.productList);
     const editProduct= useSelector((state)=>state.product.detailEditProduct);
     const user= useSelector((state)=>state.user.user);
@@ -23,9 +25,27 @@ function ProductdDetail(){
     const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     useEffect(() => {
-      NewArray();
-  }, [productList, id]);
+      dispatch(productAtion.getProductList())
+        .then(() => setLoading(false))
+        .catch((error) => {
+          console.error("Error fetching product list:", error);
+          setLoading(false);
+        });
+    }, [dispatch]);
+    useEffect(() => {
+      if (productList.length > 0) {
+        const itemsArray = productList.map((item) => item.items).flat();
+        const findId = itemsArray.filter((item, index) => index.toString() === id.toString());
+        setSeletedArry(findId);
+      }
+    }, [productList, id]);
+    useEffect(()=>{
+      if (user){
+        setName(user.name)
+      }
+    },[user])
     const slides = [
         { id: 1, src: Jeju, alt: 'Slide 1' },
         { id: 2, src: Rain, alt: 'Slide 2' },
@@ -38,18 +58,18 @@ function ProductdDetail(){
     const nextSlide = () => {
       setSlideIndex((prevIndex) => (prevIndex === slides.length - 1 ? 0 : prevIndex + 1));
     };
-    const NewArray =()=>{
-        const itemsArray = productList.map(item => item.items).flat();
-        const findId= itemsArray.filter((item, index) =>index.toString() === id.toString());
-        setSeletedArry(findId);
-    }
+    // const NewArray =()=>{
+    //     const itemsArray = productList.map(item => item.items).flat();
+    //     const findId= itemsArray.filter((item, index) =>index.toString() === id.toString());
+    //     setSeletedArry(findId);
+    // }
     const openEditForm=(product)=>{
       setShowDialog(true);
       dispatch({type:types.PRODUCT_PUT_DETAIL_SELECTED, payload: product});
       dispatch({type:types.PRODUCT_ADD_EDIT_MODAL,payload:"edit"});
     }
     const deleteItem = (productId) => {
-      dispatch(productAtion.deleteProduct(productId))
+      dispatch(productAtion.deleteProduct())
     };
     return(
         <>
@@ -57,7 +77,7 @@ function ProductdDetail(){
             seletedArry?.map((item,index)=>(
                 <div key={item._id} className="card " style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
                 <div className='flex p-1 h-[64px] items-center relative'>
-                    <div className='absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-mainColor-color_Black'>{user.name}님의 Trip Log</div>
+                    <div className='absolute left-1/2 transform -translate-x-1/2 text-lg font-semibold text-mainColor-color_Black'>{name}님의 Trip Log</div>
                 </div>
                 <div className=" w-[100%] flex items-center justify-end p-1">
                     <div className="button mr-auto w-10 h-7 bg-mainColor-color_Ivory flex justify-center" onClick={()=>{navigate('/trip')}}><IoArrowBack/></div>

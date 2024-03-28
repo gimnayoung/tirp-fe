@@ -6,7 +6,7 @@ import "./index.css"
 
 function App() {
   let unsubscribe = store.subscribe(() =>
-  console.log(store.getState(),"상태알려줌")
+  {}
 );
   return (
     <div>

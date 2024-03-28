@@ -12,7 +12,6 @@ function Login() {
   const navigate= useNavigate();
   const dispatch=useDispatch();
   const user= useSelector((state)=>state.user.user);
-  console.log('loginuser',user)
 
   const loginWithEmail=(e)=>{
     e.preventDefault();

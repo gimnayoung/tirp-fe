@@ -39,7 +39,6 @@ function Navber(){
     const user= useSelector((state)=>state.user.user);
     
     const logout=()=>{
-       console.log('로그아웃클릭')
         dispatch(userActions.logout());
     }
     return (

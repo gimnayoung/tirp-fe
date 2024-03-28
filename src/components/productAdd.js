@@ -14,7 +14,6 @@ function ProductAdd({setShowDialog, showDialog, id}) {
   const weatherOptions = ['맑음', '비', '눈', '구름'];
   const dispatch = useDispatch();
   const newFormData= {
-    productId:1,
     image:[],
     location:"",
     weather:"",
@@ -81,6 +80,10 @@ function ProductAdd({setShowDialog, showDialog, id}) {
       e.preventDefault();
       if(!user){navigate('/login')}
       if(mode === "new"){
+        if (!formData.location || !formData.weather || !formData.date || !formData.title || !formData.description) {
+          alert('모든 필수 입력 필드를 입력하세요.');
+          return;
+        }
         const imageUrls = seletedImages.map(image => image.imgUrl);
         const updatedFormData = { ...formData, image: imageUrls };
         dispatch(productAtion.createProduct({updatedFormData}))
@@ -102,7 +105,7 @@ function ProductAdd({setShowDialog, showDialog, id}) {
     <Wrap>
     <div className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
       <ModalHeader>
-        {mode==="edit"?<button className='button p-3' onClick={handleAddSubmit}>수정</button>:<button className='button p-3' onClick={handleAddSubmit}>추가</button> }
+        {mode==="edit"?<button type="submit" className='button p-3' onClick={handleAddSubmit}>수정</button>:<button type="submit" className='button p-3' onClick={handleAddSubmit}>추가</button> }
           <button className='button p-3 ml-1' onClick={handleClickClose}>닫기</button>
       </ModalHeader>
       <form className='flex flex-col p-1 w-[100%] h-[100%]'>
@@ -111,12 +114,12 @@ function ProductAdd({setShowDialog, showDialog, id}) {
         <div className='input flex'>
           {mode ==="new" ?renderFileButtons() :editFileButtons() }
           {mode==="new" ? (<> <label className="button h-[auto]" htmlFor="image" multiple >이미지 선택</label></>):""}
-         <input accept="image/*" id="image" type="file" multiple onChange={handleImageChange} style={{width:0, height:0, padding:0, overflow:"hidden", border:0}}/>
+         <input accept=".jpg, .png ,image/*" id="image" type="file" multiple onChange={handleImageChange} style={{width:0, height:0, padding:0, overflow:"hidden", border:0}}/>
         </div>
       </div>
         <div>
           <Label htmlFor="location">여행 위치</Label>
-          <input id= "location" value={formData.location} className='input' placeholder="여행 위치를 입력하세요" name="location" onChange={handleChange}/>
+          <input required maxLength="20" id= "location" value={formData.location} className='input' placeholder="여행 위치를 입력하세요" name="location" onChange={handleChange}/>
         </div>
         <div>
           <Label htmlFor="weather">여행 날씨</Label>
@@ -124,20 +127,20 @@ function ProductAdd({setShowDialog, showDialog, id}) {
             <option>{mode==="edit" ? formData.weather : "날씨를 선택해주세요"}</option>
             {
               weatherOptions.map((weather, index) => (
-                <option key={index} id="weather" name="weather" value={weather}>{weather}</option>
+                <option required key={index} id="weather" name="weather" value={weather}>{weather}</option>
               ))
             }
           </select>
           <Label htmlFor="date">여행 날짜</Label>
-          <input id="date" value={formData.date}  className='input' name="date" type="date"  onChange={handleChange} />
+          <input required id="date" value={formData.date}  className='input' name="date" type="date"  onChange={handleChange} />
         </div>
         <div>
           <Label htmlFor="title">제목</Label>
-          <input id="title" value={formData.title} className='input' onChange={handleChange} name="title" placeholder="여행지나 제목을 입력하세요" />
+          <input required maxLength="20" id="title" value={formData.title} className='input' onChange={handleChange} name="title" placeholder="여행지나 제목을 입력하세요" />
         </div>
         <div>
           <Label htmlFor="description">기록장</Label>
-          <input id="description" value={formData.description} className='input h-[120px] ver' onChange={handleChange} name="description" placeholder="여행 경험을 간단히 설명해주세요" />
+          <input required maxLength="180" id="description" value={formData.description} className='input h-[120px] ver' onChange={handleChange} name="description" placeholder="여행 경험을 간단히 설명해주세요" />
         </div>
       </form>
     </div>

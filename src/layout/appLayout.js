@@ -11,7 +11,6 @@ const AppLayout = ({ children }) => {
 
   useEffect(() => {
     dispatch(userActions.loginWithToken());
-    console.log(user,'user')
   }, []);
 
   return (

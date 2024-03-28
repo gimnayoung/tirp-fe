@@ -8,6 +8,7 @@ const createProduct = ({updatedFormData})=>async(dispatch) => {
             if(response.status !==200) throw new Error(response.error);
             dispatch({type:types.PRODUCT_CREATE_SUCCESS});
             alert("추가 되었습니다.")
+            dispatch(getProductList())
         } 
         catch (error) {
             dispatch({type:types.PRODUCT_CREATE_FAIL,payload:error.error})
@@ -20,7 +21,6 @@ const getProductList=()=>async(dispatch)=>{
         const response=await api.get('/product');
         if(response.status !==200) throw new Error(response.error);
         dispatch({type:types.PRODUCT_GET_SUCCESS,payload:response.data.data});
-        console.log(response.data.data,"이게뭔지봐야겟어")
     }
     catch (error) {
         dispatch({type:types.PRODUCT_GET_FAIL,payload:error.error})
@@ -46,7 +46,10 @@ const deleteProduct=(ProductId)=>async(dispatch)=>{
         dispatch({type:types.PRODUCT_DELETE_REQUEST});
         const response = await api.delete(`/product/${ProductId}`);
         if(response.status !== 200)throw new Error(response.error);
-        dispatch({type:types.PRODUCT_DELETE_SUCCESS});
+        dispatch({type:types.PRODUCT_DELETE_SUCCESS,payload:response.data});
+        alert("삭제 되었습니다.")
+        dispatch(getProductList());
+        console.log(response.data ,"딜리트에서 온애 나야나")
     }
     catch (error) {
         dispatch({type:types.PRODUCT_EDIT_FAIL,payload:error.error})
