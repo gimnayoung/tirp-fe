@@ -94,13 +94,6 @@ function ProductAdd({setShowDialog, showDialog, id}) {
         setShowDialog(false);
       }
     }
-    // const TestHandle =()=>{
-    //   const imageUrls = seletedImages.map(image => image.imgUrl);
-    //   setFormData(prevFormData => ({ ...prevFormData, image: imageUrls }));
-    //   dispatch(productAtion.createProduct({formData}))
-    //   console.log("{formData}:",formData);
-    // }
-
   return (
     <Wrap>
     <div className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>

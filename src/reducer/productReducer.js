@@ -16,6 +16,7 @@ function productReducer(state = initialState, action) {
         case types.PRODUCT_GET_REQUEST:
         case types.PRODUCT_GET_DETAIL_REQUEST:
         case types.PRODUCT_EDIT_REQUEST:
+        case types.PRODUCT_DELETE_REQUEST:
             return {...state, loading:true}
         case types.PRODUCT_CREATE_SUCCESS:
         case types.PRODUCT_EDIT_SUCCESS:
@@ -29,6 +30,7 @@ function productReducer(state = initialState, action) {
         case types.PRODUCT_GET_FAIL:
         case types.PRODUCT_GET_DETAIL_FAIL:
         case types.PRODUCT_EDIT_FAIL:
+        case types.PRODUCT_DELETE_FAIL:
             return {...state,error: payload}
         case types.PRODUCT_PUT_DETAIL_SELECTED:
             return { ...state,detailEditProduct:payload}

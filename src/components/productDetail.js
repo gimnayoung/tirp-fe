@@ -69,7 +69,7 @@ function ProductdDetail(){
       dispatch({type:types.PRODUCT_ADD_EDIT_MODAL,payload:"edit"});
     }
     const deleteItem = (productId) => {
-      dispatch(productAtion.deleteProduct())
+      dispatch(productAtion.deleteProduct(productId))
     };
     return(
         <>

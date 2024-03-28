@@ -44,12 +44,12 @@ const editProduct=({formData},editProductId,id)=>async(dispatch)=>{
 const deleteProduct=(ProductId)=>async(dispatch)=>{
     try{
         dispatch({type:types.PRODUCT_DELETE_REQUEST});
+        console.log(ProductId,'하 시발');
         const response = await api.delete(`/product/${ProductId}`);
         if(response.status !== 200)throw new Error(response.error);
         dispatch({type:types.PRODUCT_DELETE_SUCCESS,payload:response.data});
         alert("삭제 되었습니다.")
         dispatch(getProductList());
-        console.log(response.data ,"딜리트에서 온애 나야나")
     }
     catch (error) {
         dispatch({type:types.PRODUCT_EDIT_FAIL,payload:error.error})
