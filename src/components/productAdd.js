@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import * as types from "../constants/product.constants";
 import { useDispatch, useSelector } from "react-redux";
 import { productAtion } from '../action/productAtion';
 import { useNavigate, useParams } from "react-router-dom";
 
-function ProductAdd({mode, setShowDialog, showDialog}) {
+function ProductAdd({setShowDialog, showDialog, id}) {
   const user= useSelector((state)=>state.user.user);
+  const mode= useSelector((state)=>state.product.modalState);
+  const editProduct= useSelector((state)=>state.product.detailEditProduct);
   const navigate = useNavigate();
   let fileReader =new FileReader();
   const weatherOptions = ['맑음', '비', '눈', '구름'];
@@ -19,17 +22,28 @@ function ProductAdd({mode, setShowDialog, showDialog}) {
     title:"",
     description:"",
    }
-   const [formData,setFormData]=useState(mode ==="new" ? {...newFormData}:"");
+   const [formData,setFormData]=useState(mode ==="new" ? {...newFormData}:editProduct);
    const [seletedImages,setSeletedImages]=useState([]);
    const [nullError,setNullError]=useState("");
 
+   useEffect(()=>{
+    if(showDialog){
+    if (mode === "edit") {
+      setFormData(editProduct);
+    }
+    else {
+      setFormData({...newFormData});
+    }
+  }
+   },[showDialog])
     const handleChange=(e)=>{
         e.preventDefault();
-        const { id,value }= e.target;
-        setFormData({...formData,[id]:value});
+        const { name,value }= e.target;
+        setFormData({...formData,[name]:value});
     }
     const handleClickClose=()=>{
         setShowDialog(false);
+        dispatch({type:types.PRODUCT_ADD_EDIT_MODAL,payload:""});
     }
     const handleImageChange=(e)=>{
       e.preventDefault();
@@ -52,6 +66,13 @@ function ProductAdd({mode, setShowDialog, showDialog}) {
           </button>
       ));
     };
+    const editFileButtons=()=>{
+      return formData.image.map((file, index) => (
+        <button key={index} className='deleteButton cursor-auto'>
+          {file}
+        </button>
+    ));
+    }
     const removeFile = (index) => {
       setSeletedImages(prevFiles => prevFiles.filter((file,i) => i !== index));
     };
@@ -65,6 +86,10 @@ function ProductAdd({mode, setShowDialog, showDialog}) {
         dispatch(productAtion.createProduct({updatedFormData}))
         setShowDialog(false);
       }
+      else {
+        dispatch(productAtion.editProduct({formData},editProduct._id,id));
+        setShowDialog(false);
+      }
     }
     // const TestHandle =()=>{
     //   const imageUrls = seletedImages.map(image => image.imgUrl);
@@ -74,48 +99,49 @@ function ProductAdd({mode, setShowDialog, showDialog}) {
     // }
 
   return (
+    <Wrap>
     <div className='card' style={{ boxShadow: "4px 4px 0px 5px rgba(161,148,148,0.9)" }}>
       <ModalHeader>
-          <button className='button p-3' onClick={handleAddSubmit}>추가</button>
+        {mode==="edit"?<button className='button p-3' onClick={handleAddSubmit}>수정</button>:<button className='button p-3' onClick={handleAddSubmit}>추가</button> }
           <button className='button p-3 ml-1' onClick={handleClickClose}>닫기</button>
-          {/* <button onClick={TestHandle}>test용입니다</button> */}
       </ModalHeader>
       <form className='flex flex-col p-1 w-[100%] h-[100%]'>
       <div>
         <Label htmlFor="image">사진 추가</Label>
         <div className='input flex'>
-          {renderFileButtons()}
-         <label className="button h-[auto]" htmlFor="image" multiple >이미지 선택</label>
+          {mode ==="new" ?renderFileButtons() :editFileButtons() }
+          {mode==="new" ? (<> <label className="button h-[auto]" htmlFor="image" multiple >이미지 선택</label></>):""}
          <input accept="image/*" id="image" type="file" multiple onChange={handleImageChange} style={{width:0, height:0, padding:0, overflow:"hidden", border:0}}/>
         </div>
       </div>
         <div>
           <Label htmlFor="location">여행 위치</Label>
-          <input className='input' placeholder="여행 위치를 입력하세요" id="location" onChange={handleChange}/>
+          <input id= "location" value={formData.location} className='input' placeholder="여행 위치를 입력하세요" name="location" onChange={handleChange}/>
         </div>
         <div>
           <Label htmlFor="weather">여행 날씨</Label>
-          <select className='input' id="weather" onChange={handleChange}>
-            <option>날씨를 선택하세요</option>
+          <select className='input' name="weather" onChange={handleChange}>
+            <option>{mode==="edit" ? formData.weather : "날씨를 선택해주세요"}</option>
             {
               weatherOptions.map((weather, index) => (
-                <option key={index} value={weather}>{weather}</option>
+                <option key={index} id="weather" name="weather" value={weather}>{weather}</option>
               ))
             }
           </select>
           <Label htmlFor="date">여행 날짜</Label>
-          <input className='input' id="date" type="date"  onChange={handleChange} />
+          <input id="date" value={formData.date}  className='input' name="date" type="date"  onChange={handleChange} />
         </div>
         <div>
           <Label htmlFor="title">제목</Label>
-          <input className='input' onChange={handleChange} id="title" placeholder="여행지나 제목을 입력하세요" />
+          <input id="title" value={formData.title} className='input' onChange={handleChange} name="title" placeholder="여행지나 제목을 입력하세요" />
         </div>
         <div>
           <Label htmlFor="description">기록장</Label>
-          <input className='input h-[120px] ver' onChange={handleChange} id="description" placeholder="여행 경험을 간단히 설명해주세요" />
+          <input id="description" value={formData.description} className='input h-[120px] ver' onChange={handleChange} name="description" placeholder="여행 경험을 간단히 설명해주세요" />
         </div>
       </form>
     </div>
+    </Wrap>
   );
 }
 
@@ -132,5 +158,16 @@ const Label = styled.label`
   color: #444242;
 `;
 
-
+const Wrap = styled.div`
+background-color: rgba(0, 0, 0, 0.7);
+display: flex;
+align-items: center;
+justify-content: center;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+`
 export default ProductAdd;
